@@ -49,7 +49,7 @@ const Index = () => {
   return (
     <div className="min-h-screen p-4 max-w-2xl mx-auto space-y-6">
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold">Text Entry App</h1>
+        <h1 className="text-2xl font-bold">Text Entry Demo</h1>
         
         <div className="space-y-2">
           <Textarea
@@ -82,7 +82,7 @@ const Index = () => {
             ))}
             {!entries?.length && (
               <p className="text-muted-foreground text-center">
-                No entries yet. Add your first one above!
+                No entries yet, add text above.
               </p>
             )}
           </ScrollArea>
