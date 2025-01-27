@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { db, TextEntry } from '../db/database';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { Trash2 } from 'lucide-react';
 
 const Index = () => {
   const [newText, setNewText] = useState('');
@@ -46,6 +47,22 @@ const Index = () => {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await db.textEntries.delete(id);
+      toast({
+        title: "Success",
+        description: "Entry deleted successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete entry",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen p-4 max-w-2xl mx-auto space-y-6">
       <div className="space-y-4">
@@ -72,9 +89,17 @@ const Index = () => {
             {entries?.map((entry) => (
               <div
                 key={entry.id}
-                className="mb-4 p-3 bg-secondary rounded-lg"
+                className="mb-4 p-3 bg-secondary rounded-lg relative group"
               >
-                <p className="whitespace-pre-wrap">{entry.content}</p>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => entry.id && handleDelete(entry.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+                <p className="whitespace-pre-wrap pr-8">{entry.content}</p>
                 <p className="text-sm text-muted-foreground mt-2">
                   {new Date(entry.timestamp).toLocaleString()}
                 </p>
@@ -82,7 +107,7 @@ const Index = () => {
             ))}
             {!entries?.length && (
               <p className="text-muted-foreground text-center">
-                No entries yet, add text above.
+                No entries yet. Add your first one above!
               </p>
             )}
           </ScrollArea>
