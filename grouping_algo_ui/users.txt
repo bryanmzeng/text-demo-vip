@@ -1,0 +1,13 @@
+Bob NightOwl 13 CS Weekdays(Morning) Analytical 3 Availability Long Home
+Alice EarlyRiser 17 MechE Weekdays(Afternoon) Practical 4 LearningStyle Short Library
+Max NightOwl 16 Business Weekdays(Evening) Interpersonal 5 Availability Short Cafe
+Kim NightOwl 14 CS Weekends(Morning) Holistic 2 LearningStyle Long Silent
+Mike EarlyRiser 11 MechE Weekends(Afternoon) Analytical 3 Availability Short Home
+Joe NightOwl 19 CompE Weekends(Evening) Practical 1 LearningStyle Long Cafe
+Cam EarlyRiser 20 BME Weekdays(Morning) Interpersonal 5 LearningStyle Short Library
+Jill EarlyRiser 16 EnvE Weekdays(Afternoon) Holistic 4 Availability Long Silent
+Jack NightOwl 16 CivilE Weekdays(Evening) Analytical 2 LearningStyle Short Cafe
+Mary NightOwl 18 BME Weekends(Morning) Practical 3 Availability Long Home
+Cara EarlyRiser 10 MechE Weekends(Afternoon) Interpersonal 4 LearningStyle Long Silent
+Gus NightOwl 12 CompE Weekends(Evening) Holistic 1 Availability Short Library
+Julie EarlyRiser 21 Business Weekdays(Morning) Analytical 5 Availability Long Cafe
