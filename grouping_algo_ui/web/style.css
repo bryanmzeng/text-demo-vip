@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  #fileInput {
+    margin: 20px;
+  }
+  
+  #results {
+    margin-top: 20px;
+  }
