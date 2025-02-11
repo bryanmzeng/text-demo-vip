@@ -1,5 +1,6 @@
 import random
 import eel
+import itertools
 from collections import defaultdict
 
 eel.init('web')
@@ -32,57 +33,54 @@ def load_people(filename):
     return people
 
 def match_people(people, group_size):
-    #group by 3
-    traits = defaultdict(list) #holds the people w their data as the Key
-    #default Dictionary stores the traits as array group, value is person
-    for person in people:
-        key = (
-            person['studyType'], person['creditHours'], person['major'],
-            person['availability'], person['learnerType'], person['intensity'],
-            person['priority'], person['workingStyle'], person['environment']
-        )
-        traits[key].append(person)
-    groups = [] #to hold the pairs that are generated
-    unmatched = [] #if we have an odd number
-    #first checking for all 3 traits
-    for key, group in traits.items(): 
-        #the group is groups of three, so for example night,CS,18 or something
-        while len(group) >= group_size:
-            groups.append([group.pop() for _ in range(group_size)])#pair these people up, they have three in common 
-        if group:
-            unmatched.extend(group)#no match found, they are alone (unique three trait combo)
-    #now doing the same, but making our groups by the same study type and same major
-    studyAndMajor = defaultdict(list)
-    for person in unmatched:
-        key = (person['studyType'], person['major'])
-        studyAndMajor[key].append(person)
-    unmatched = []
-    for key, group in studyAndMajor.items():
-        while len(group) >= group_size:
-            groups.append([group.pop() for _ in range(group_size)])
-        if group:
-            unmatched.extend(group)
-    #now just doing study type 
-    studyTP = defaultdict(list)
-    for person in unmatched:
-        key = person['studyType']
-        studyTP[key].append(person)
-    unmatched = []
-    for key, group in studyTP.items():
-        while len(group) >= group_size:
-            groups.append([group.pop() for _ in range(group_size)])
-        if group:
-            unmatched.extend(group)
-    #for people with NOTHING in common, just do it randoly
-    #all unique traits
-    random.shuffle(unmatched)
+    # weights for each trait (adjust as needed)
+    weights = {
+        'studyType': 10,
+        'creditHours': 5,
+        'major': 15,
+        'availability': 20,
+        'learnerType': 10,
+        'intensity': 5,
+        'priority': 5,
+        'workingStyle': 10,
+        'environment': 10
+    }
+    
+    def calculate_compatibility(p1, p2):
+        score = 0
+        for key, weight in weights.items():
+            if p1.get(key) == p2.get(key):
+                score += weight
+        return score
+
+    groups = []
+    unmatched = people[:]  # create a working copy of the list
+
+    # While enough people remain to form a full group...
     while len(unmatched) >= group_size:
-        groups.append([unmatched.pop() for _ in range(group_size)])
+        best_group = None
+        best_score = -1
+        
+        for group in itertools.combinations(unmatched, group_size):
+            # Sum compatibility for each pair in the group
+            group_score = sum(calculate_compatibility(a, b) for a, b in itertools.combinations(group, 2))
+            if group_score > best_score:
+                best_score = group_score
+                best_group = group
+        
+        if best_group is None:
+            break
+        
+        groups.append(list(best_group))
+        for person in best_group:
+            unmatched.remove(person)
     
     if unmatched:
-        groups.append(unmatched)#Add remaining unmatched people as a smaller group
+        groups.append(unmatched)
     
     return groups
+
+
 
 @eel.expose
 def match_from_file(content, group_size):
