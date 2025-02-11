@@ -32,18 +32,18 @@ def load_people(filename):
                 print(f"Invalid data on line: {line.strip()}")
     return people
 
-def match_people(people, group_size):
+def match_people(people, group_size, weights):
     # weights for each trait (adjust as needed)
     weights = {
-        'studyType': 10,
-        'creditHours': 5,
-        'major': 15,
-        'availability': 20,
-        'learnerType': 10,
-        'intensity': 5,
-        'priority': 5,
-        'workingStyle': 10,
-        'environment': 10
+        'studyType': weights[0],
+        'creditHours': weights[1],
+        'major': weights[2],
+        'availability': weights[3],
+        'learnerType': weights[4],
+        'intensity': weights[5],
+        'priority': weights[6],
+        'workingStyle': weights[7],
+        'environment': weights[8]
     }
     
     def calculate_compatibility(p1, p2):
@@ -83,7 +83,7 @@ def match_people(people, group_size):
 
 
 @eel.expose
-def match_from_file(content, group_size):
+def match_from_file(content, group_size, weights):
     try:
         # Split the file content into lines
         lines = content.strip().split('\n')
@@ -104,7 +104,7 @@ def match_from_file(content, group_size):
                 'environment': parts[9]
             }
             people.append(person)
-        groups = match_people(people, group_size)
+        groups = match_people(people, group_size, weights)
         return [[{k: v for k, v in person.items()} for person in group] for group in groups]
     except Exception as e:
         print("Error:", e)

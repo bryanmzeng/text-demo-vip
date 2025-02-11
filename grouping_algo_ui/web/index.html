@@ -1,20 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Find My Perfect Study Group!</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Find My Perfect Study Group!</h1>
-  <label for="groupSize">Select Group Size:</label>
-  <input type="number" id="groupSize" min="2" max="6" value="2">
-  <input type="file" id="fileInput">
-  <button onclick="uploadFile()">Match People</button>
-  <div id="results"></div>
-  
-  <script type="text/javascript" src="eel.js"></script>
-  <script src="func.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find My Perfect Study Group!</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Find My Perfect Study Group!</h1>
+    <label for="groupSize">Select Group Size:</label>
+    <input type="number" id="groupSize" min="2" max="6" value="2" />
+    <input type="file" id="fileInput" />
+    <button onclick="uploadFile()">Match People</button>
+    <h2>Define Feature Weights</h2>
+    <div id="weights">
+      <label for="weight1">Study Type:</label>
+      <input
+        type="number"
+        id="weight1"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight2">Credit Hours:</label>
+      <input
+        type="number"
+        id="weight2"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight3">Major:</label>
+      <input
+        type="number"
+        id="weight3"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight4">Availability:</label>
+      <input
+        type="number"
+        id="weight4"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight5">Learner Type:</label>
+      <input
+        type="number"
+        id="weight5"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight6">Intensity:</label>
+      <input
+        type="number"
+        id="weight6"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight7">Priority:</label>
+      <input
+        type="number"
+        id="weight7"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight8">Working Style:</label>
+      <input
+        type="number"
+        id="weight8"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+
+      <label for="weight9">Study Environment:</label>
+      <input
+        type="number"
+        id="weight9"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+      /><br />
+    </div>
+
+    <div id="results"></div>
+
+    <script type="text/javascript" src="eel.js"></script>
+    <script src="func.js"></script>
+  </body>
 </html>
