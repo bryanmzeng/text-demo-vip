@@ -1,18 +1,7 @@
-//returns a list of weights from the user input fields
-function getWeights() {
-  let weights = [];
-  for (let i = 1; i <= 9; i++) {
-    let weightValue = parseFloat(document.getElementById(`weight${i}`).value);
-    weights.push(weightValue);
-  }
-  return weights;
-}
-
 function uploadFile() {
   const fileInput = document.getElementById("fileInput");
   const file = fileInput.files[0];
   const groupSize = parseInt(document.getElementById("groupSize").value);
-  const weights = getWeights();
 
   if (!file) {
     alert("Please choose a file first!");
@@ -26,9 +15,44 @@ function uploadFile() {
   const reader = new FileReader();
   reader.onload = function (event) {
     const content = event.target.result;
-    eel.match_from_file(content, groupSize, weights)(displayResults);
+    const { people, weightsMatrix } = parseUserFile(content);
+    eel.match_from_file(content, groupSize, weightsMatrix)(displayResults);
   };
   reader.readAsText(file);
+}
+
+function parseUserFile(content) {
+  let lines = content.trim().split("\n");
+  let people = [];
+  let weightsMatrix = [];
+
+  lines.forEach((line) => {
+    let parts = line.trim().split(/\s+/);
+    if (parts.length !== 19) {
+      console.warn("Skipping invalid line:", line);
+      return;
+    }
+
+    let person = {
+      name: parts[0],
+      studyType: parts[1],
+      creditHours: parseInt(parts[2]),
+      major: parts[3],
+      availability: parts[4],
+      learnerType: parts[5],
+      intensity: parseInt(parts[6]),
+      priority: parts[7],
+      workingStyle: parts[8],
+      environment: parts[9],
+    };
+
+    let weights = parts.slice(10).map(Number);
+
+    people.push(person);
+    weightsMatrix.push(weights);
+  });
+
+  return { people, weightsMatrix };
 }
 
 function displayResults(groups) {

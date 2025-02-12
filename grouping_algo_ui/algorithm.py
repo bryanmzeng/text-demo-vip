@@ -6,7 +6,6 @@ from collections import defaultdict
 eel.init('web')
 
 def load_people(filename):
-    #file reading from chat gpt because i don't remember how to do it
     people = []
     with open(filename, 'r') as file:
         for line in file:
@@ -16,6 +15,7 @@ def load_people(filename):
                 continue  # Skip invalid lines
             try:
                 person = {
+                    'index': len(people),
                     'name': parts[0],
                     'studyType': parts[1],
                     'creditHours': int(parts[2]), # Ensure this is an integer
@@ -32,38 +32,48 @@ def load_people(filename):
                 print(f"Invalid data on line: {line.strip()}")
     return people
 
-def match_people(people, group_size, weights):
-    # weights for each trait (adjust as needed)
-    weights = {
-        'studyType': weights[0],
-        'creditHours': weights[1],
-        'major': weights[2],
-        'availability': weights[3],
-        'learnerType': weights[4],
-        'intensity': weights[5],
-        'priority': weights[6],
-        'workingStyle': weights[7],
-        'environment': weights[8]
-    }
+
+def calculate_compatibility(user1, user2, weights1, weights2):
+    features = [
+        (user1['studyType'] == user2['studyType']),
+        abs(user1['creditHours'] - user2['creditHours']) / max(user1['creditHours'], user2['creditHours']),
+        (user1['major'] == user2['major']),
+        (user1['availability'] == user2['availability']),
+        (user1['learnerType'] == user2['learnerType']),
+        abs(user1['intensity'] - user2['intensity']) / max(user1['intensity'], user2['intensity']),
+        (user1['priority'] == user2['priority']),
+        (user1['workingStyle'] == user2['workingStyle']),
+        (user1['environment'] == user2['environment'])
+    ]
     
-    def calculate_compatibility(p1, p2):
-        score = 0
-        for key, weight in weights.items():
-            if p1.get(key) == p2.get(key):
-                score += weight
-        return score
+    weighted_similarity = sum(
+        (weights1[i] + weights2[i]) / 2 * (1 - features[i] if isinstance(features[i], float) else features[i])
+        for i in range(len(features))
+    )
+    return weighted_similarity
 
+def calculate_group_score(group, weights_matrix):
+    total_score = 0
+    pair_count = 0
+    
+    for user1, user2 in itertools.combinations(group, 2):
+        index1 = user1['index']
+        index2 = user2['index']
+        total_score += calculate_compatibility(user1, user2, weights_matrix[index1], weights_matrix[index2])
+        pair_count += 1
+    
+    return total_score / pair_count if pair_count > 0 else 0
+
+def match_people(people, group_size, weights_matrix):
     groups = []
-    unmatched = people[:]  # create a working copy of the list
-
-    # While enough people remain to form a full group...
+    unmatched = people[:]
+    
     while len(unmatched) >= group_size:
         best_group = None
         best_score = -1
         
         for group in itertools.combinations(unmatched, group_size):
-            # Sum compatibility for each pair in the group
-            group_score = sum(calculate_compatibility(a, b) for a, b in itertools.combinations(group, 2))
+            group_score = calculate_group_score(group, weights_matrix)
             if group_score > best_score:
                 best_score = group_score
                 best_group = group
@@ -80,10 +90,8 @@ def match_people(people, group_size, weights):
     
     return groups
 
-
-
 @eel.expose
-def match_from_file(content, group_size, weights):
+def match_from_file(content, group_size, weights_matrix):
     try:
         # Split the file content into lines
         lines = content.strip().split('\n')
@@ -92,6 +100,7 @@ def match_from_file(content, group_size, weights):
         for line in lines:
             parts = line.strip().split()
             person = {
+                'index': len(people),
                 'name': parts[0],
                 'studyType': parts[1],
                 'creditHours': int(parts[2]),
@@ -104,7 +113,7 @@ def match_from_file(content, group_size, weights):
                 'environment': parts[9]
             }
             people.append(person)
-        groups = match_people(people, group_size, weights)
+        groups = match_people(people, group_size, weights_matrix)
         return [[{k: v for k, v in person.items()} for person in group] for group in groups]
     except Exception as e:
         print("Error:", e)
