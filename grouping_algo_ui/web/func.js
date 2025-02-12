@@ -1,8 +1,8 @@
 function uploadFile() {
-  const fileInput = document.getElementById('fileInput');
+  const fileInput = document.getElementById("fileInput");
   const file = fileInput.files[0];
-  const groupSize = parseInt(document.getElementById('groupSize').value);
-  
+  const groupSize = parseInt(document.getElementById("groupSize").value);
+
   if (!file) {
     alert("Please choose a file first!");
     return;
@@ -13,29 +13,59 @@ function uploadFile() {
     return;
   }
   const reader = new FileReader();
-  reader.onload = function(event) {
+  reader.onload = function (event) {
     const content = event.target.result;
-    eel.match_from_file(content, groupSize)(displayResults);
+    const { people, weightsMatrix } = parseUserFile(content);
+    eel.match_from_file(content, groupSize, weightsMatrix)(displayResults);
   };
   reader.readAsText(file);
 }
-  
+
+function parseUserFile(content) {
+  let lines = content.trim().split("\n");
+  let people = [];
+  let weightsMatrix = [];
+
+  lines.forEach((line) => {
+    let parts = line.trim().split(/\s+/);
+    if (parts.length !== 19) {
+      console.warn("Skipping invalid line:", line);
+      return;
+    }
+
+    let person = {
+      name: parts[0],
+      studyType: parts[1],
+      creditHours: parseInt(parts[2]),
+      major: parts[3],
+      availability: parts[4],
+      learnerType: parts[5],
+      intensity: parseInt(parts[6]),
+      priority: parts[7],
+      workingStyle: parts[8],
+      environment: parts[9],
+    };
+
+    let weights = parts.slice(10).map(Number);
+
+    people.push(person);
+    weightsMatrix.push(weights);
+  });
+
+  return { people, weightsMatrix };
+}
+
 function displayResults(groups) {
-  const resultsDiv = document.getElementById('results');
+  const resultsDiv = document.getElementById("results");
   resultsDiv.innerHTML = "<h2>Matched Groups:</h2>";
   groups.forEach((group, index) => {
-        //const p1 = pair[0]
-        //const pairElement = document.createElement("p");
-        //const p1Data = document.createElement("p");
-        //pairElement.innerText = `${p1.name} WITH ${pair[1].name}`;
-        //resultsDiv.appendChild(pairElement);
-        const groupElement = document.createElement("div");
-        groupElement.innerHTML = `<h3>Group ${index + 1}:</h3>`;
-        group.forEach(person => {
-            const personElement = document.createElement("p");
-            personElement.textContent = `Name: ${person.name}, Study Type: ${person.studyType}, Credit Hours: ${person.creditHours}, Major: ${person.major}, Availability: ${person.availability}, Learner Type: ${person.learnerType}, Intensity: ${person.intensity}, Priority: ${person.priority}, Working Style: ${person.workingStyle}, Environment: ${person.environment}`;
-            groupElement.appendChild(personElement);
-        });
-        resultsDiv.appendChild(groupElement);
+    const groupElement = document.createElement("div");
+    groupElement.innerHTML = `<h3>Group ${index + 1}:</h3>`;
+    group.forEach((person) => {
+      const personElement = document.createElement("p");
+      personElement.textContent = `Name: ${person.name}, Study Type: ${person.studyType}, Credit Hours: ${person.creditHours}, Major: ${person.major}, Availability: ${person.availability}, Learner Type: ${person.learnerType}, Intensity: ${person.intensity}, Priority: ${person.priority}, Working Style: ${person.workingStyle}, Environment: ${person.environment}`;
+      groupElement.appendChild(personElement);
     });
+    resultsDiv.appendChild(groupElement);
+  });
 }
