@@ -28,7 +28,7 @@ function parseUserFile(content) {
 
   lines.forEach((line) => {
     let parts = line.trim().split(/\s+/);
-    if (parts.length !== 19) {
+    if (parts.length !== 23) {
       console.warn("Skipping invalid line:", line);
       return;
     }
@@ -44,9 +44,13 @@ function parseUserFile(content) {
       priority: parts[7],
       workingStyle: parts[8],
       environment: parts[9],
+      gender: parts[10],
+      minor: parts[11],
+      year: parts[12],
+      interests: parts[13]
     };
 
-    let weights = parts.slice(10).map(Number);
+    let weights = parts.slice(14).map(Number);
 
     people.push(person);
     weightsMatrix.push(weights);
@@ -63,7 +67,7 @@ function displayResults(groups) {
     groupElement.innerHTML = `<h3>Group ${index + 1}:</h3>`;
     group.forEach((person) => {
       const personElement = document.createElement("p");
-      personElement.textContent = `Name: ${person.name}, Study Type: ${person.studyType}, Credit Hours: ${person.creditHours}, Major: ${person.major}, Availability: ${person.availability}, Learner Type: ${person.learnerType}, Intensity: ${person.intensity}, Priority: ${person.priority}, Working Style: ${person.workingStyle}, Environment: ${person.environment}`;
+      personElement.textContent = `Name: ${person.name}, Study Type: ${person.studyType}, Credit Hours: ${person.creditHours}, Major: ${person.major}, Availability: ${person.availability}, Learner Type: ${person.learnerType}, Intensity: ${person.intensity}, Priority: ${person.priority}, Working Style: ${person.workingStyle}, Environment: ${person.environment}, Gender: ${person.gender}, Minor: ${person.minor}, Year: ${person.year}, Interests: ${person.interests} `;
       groupElement.appendChild(personElement);
     });
     resultsDiv.appendChild(groupElement);

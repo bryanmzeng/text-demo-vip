@@ -10,7 +10,7 @@ def load_people(filename):
     with open(filename, 'r') as file:
         for line in file:
             parts = line.strip().split()
-            if len(parts) != 10:
+            if len(parts) != 14:
                 print(f"Skipping invalid line: {line.strip()}")
                 continue  # Skip invalid lines
             try:
@@ -25,7 +25,12 @@ def load_people(filename):
                     'intensity': int(parts[6]),
                     'priority': parts[7],
                     'workingStyle': parts[8],
-                    'environment': parts[9]
+                    'environment': parts[9],
+                    # the following attributes aren't considered in the algo, its data the facilitating interactions group needs collected
+                    'gender': parts[10],
+                    'minor': parts[11],
+                    'year': parts[12],
+                    'interests': parts[13]
                 }
                 people.append(person)
             except ValueError:
@@ -110,7 +115,11 @@ def match_from_file(content, group_size, weights_matrix):
                 'intensity': int(parts[6]),
                 'priority': parts[7],
                 'workingStyle': parts[8],
-                'environment': parts[9]
+                'environment': parts[9],
+                'gender': parts[10],
+                'minor': parts[11],
+                'year': parts[12],
+                'interests': parts[13]
             }
             people.append(person)
         groups = match_people(people, group_size, weights_matrix)
