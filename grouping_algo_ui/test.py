@@ -4,12 +4,11 @@ from algorithm import match_people
 
 
 def create_person(index, name, studyType, creditHours, major, availability, learnerType,
-                  intensity, priority, workingStyle, environment, gender, minor, year, interests):
+                  intensity, priority, workingStyle, environment):
     return {
         'index': index, 'name': name, 'studyType': studyType, 'creditHours': creditHours, 'major': major,
         'availability': availability, 'learnerType': learnerType, 'intensity': intensity, 'priority': priority,
-        'workingStyle': workingStyle, 'environment': environment, 'gender': gender, 'minor': minor,
-        'year': year, 'interests': interests
+        'workingStyle': workingStyle, 'environment': environment
     }
 def create_weights_matrix(size):
     return [[1] * 9 for _ in range(size)]
@@ -34,7 +33,7 @@ def test_1():
 # test 2: ensure groups of required size or less abd not more is being formed
 def test_2():
     people = [
-        create_person(i, f"Person{i}", "Alice", "NightOwl", 13, "CS", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home")
+        create_person(i, f"Person{i}", "NightOwl", 13, "CS", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home")
         for i in range(5)
     ]
     weights_matrix = create_weights_matrix(len(people))
@@ -49,7 +48,7 @@ def test_2():
 def test_3():
     names = ["Alice", "Bob", "Max", "Kim", "Julie"]
     people = [
-        create_person(i, f"Person{i}", random.choice(names), "NightOwl", random.randint(12, 21), "CS", "Weekdays(Morning)", "Analytical", random.randint(1, 5), "Availability", "Long", "Home")
+        create_person(i, random.choice(names), "NightOwl", random.randint(12, 21), "CS", "Weekdays(Morning)", "Analytical", random.randint(1, 5), "Availability", "Long", "Home")
         for i in range(100)
     ]
     weights_matrix = create_weights_matrix(len(people))
@@ -58,3 +57,7 @@ def test_3():
     assert all(len(group) <= 4 for group in groups) 
     print("Test passed! The algorithm's performance is not impacted by large inputs.")
 
+if __name__ == "__main__":
+    test_1()
+    test_2()
+    test_3()
