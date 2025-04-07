@@ -1,6 +1,10 @@
 import json
 import subprocess
 
+'''
+This file links student_groups.json to the local AI model and prompts it to identify patterns between characteristics availability, learner type, study style, intensity) and academic performance.
+'''
+
 with open("student_groups.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
