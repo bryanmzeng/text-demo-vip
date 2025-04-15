@@ -13,13 +13,13 @@ def create_person(index, name, studyType, creditHours, major, availability, lear
 def create_weights_matrix(size):
     return [[1] * 9 for _ in range(size)]
 
-# Verufy grouping algo functions properly
+# Verify grouping algo functions properly
 
 # test 1: matches people with the same characteristics together, w/o weights applied
 def test_1():
     people = [
-        create_person(0, "Alice", "NightOwl", 13, "CS", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home"),
-        create_person(0, "Bob", "NightOwl", 13, "CS", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home"),
+        create_person(0, "Alice", "NightOwl", 13, "IE", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home"),
+        create_person(0, "Francis", "NightOwl", 13, "IE", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home"),
         create_person(0, "Max", "NightOwl", 3, "CS", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home"),
         create_person(0, "Kim", "NightOwl", 3, "CS", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home")
     ]
@@ -28,9 +28,14 @@ def test_1():
     
     assert len(groups) == 2
     assert len(groups[0]) == 2
+    print("Final Groups:")
+    for i, group in enumerate(groups):
+        print(f"Group {i+1}:")
+        for person in group:
+            print(f"  - {person['name']}")
     print("Test passed! The algorithm is matching people with similar characteristics.")  
 
-# test 2: ensure groups of required size or less abd not more is being formed
+# test 2: ensure groups of required size or less and not more is being formed
 def test_2():
     people = [
         create_person(i, f"Person{i}", "NightOwl", 13, "CS", "Weekdays(Morning)", "Analytical", 3, "Availability", "Long", "Home")
@@ -45,8 +50,9 @@ def test_2():
     print("Test passed! The algorithm is grouping correctly.")
 
 # test 3: trialing grouping algorithm performance capabilities
+
 def test_3():
-    names = ["Alice", "Bob", "Max", "Kim", "Julie"]
+    names = ["Alice", "Francis", "Max", "Kim", "Julie"]
     people = [
         create_person(i, random.choice(names), "NightOwl", random.randint(12, 21), "CS", "Weekdays(Morning)", "Analytical", random.randint(1, 5), "Availability", "Long", "Home")
         for i in range(100)
@@ -56,6 +62,7 @@ def test_3():
     assert len(groups) > 0 
     assert all(len(group) <= 4 for group in groups) 
     print("Test passed! The algorithm's performance is not impacted by large inputs.")
+    
 
 if __name__ == "__main__":
     test_1()
