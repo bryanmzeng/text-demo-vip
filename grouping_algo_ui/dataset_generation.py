@@ -49,6 +49,7 @@ def create_groups(students, group_size=3):
     random.shuffle(students)
     groups = []
     
+    group_number = 1
     for i in range(0, len(students) - group_size + 1, group_size):
         group = students[i:i + group_size]
         
@@ -59,17 +60,22 @@ def create_groups(students, group_size=3):
         # Giving higher grade is students have same availability/learner type, else lower
         if same_availability or same_learner_type:
             for s in group:
-                s['grade'] = random.randint(85, 100)
+                s['grade'] = random.randint(80, 100)
         else:
             for s in group:
-                s['grade'] = random.randint(60, 85)
+                s['grade'] = random.randint(60, 80)
         
         avg_grade = sum(s['grade'] for s in group) / group_size
-        groups.append({'members': group, 'average_grade': avg_grade})
+        groups.append({
+            'group_number': group_number,
+            'members': group,
+            'average_grade': avg_grade
+        })
+        group_number += 1
     
     return groups
 
-def save_to_json(data, filename="student_groups.json"):
+def save_to_json(data, filename="student_groups2.json"):
     """Save generated groups to a JSON file."""
     with open(filename, "w") as f:
         json.dump(data, f, indent=4)

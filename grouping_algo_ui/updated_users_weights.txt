@@ -1,3 +1,4 @@
+Francis NightOwl 13 IE Weekdays(Morning) Analytical 3 Availability Long Home M Business 2 baking 0.31 0.0 0.32 0.37 0.0 0.0 0.0 0.0 0.0
 Bob NightOwl 13 CS Weekdays(Morning) Analytical 3 Availability Long Home M Business 2 gaming 0.31 0.0 0.32 0.37 0.0 0.0 0.0 0.0 0.0 
 Alice EarlyRiser 17 MechE Weekdays(Afternoon) Practical 4 LearningStyle Short Library F CS 1 photography 0.0 0.33 0.0 0.33 0.0 0.0 0.34 0.0 0.0 
 Max NightOwl 16 Business Weekdays(Evening) Interpersonal 5 Availability Short Cafe M CS 4 soccer 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 0.0 
